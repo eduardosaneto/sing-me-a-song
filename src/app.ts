@@ -5,7 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/test", (req, res) => {
+app.post("/recommendations", (req, res) => {
+  const { name, link } = req.body;
   res.send("OK!");
 });
 
