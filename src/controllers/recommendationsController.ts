@@ -12,7 +12,7 @@ export async function insert(req: Request, res: Response) {
         if (!validBody.error) {
             await recommendationsRepository.insert(name, youtubeLink);
         } else {
-            res.sendStatus(422);
+            return res.sendStatus(400);
         }
         res.sendStatus(201);
     } catch(e) {
@@ -42,3 +42,27 @@ export async function downScore(req: Request, res: Response) {
         res.sendStatus(500);
     }
 }
+
+export async function load(_: Request, res: Response) {
+    try {
+        const songs = await recommendationsService.load();
+        if(!songs) res.sendStatus(404);
+        res.send(songs);
+    } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
+
+export async function loadTop(req: Request, res: Response) {
+    try {
+        const amount = Number(req.params.amount);
+        const songs = await recommendationsService.loadTop(amount);
+        if(!songs) res.sendStatus(404);
+        res.send(songs);
+    } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
+
