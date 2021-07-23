@@ -1,16 +1,7 @@
-import connection from "../../src/database";
-
-export async function insertSong (name: string, link: string) {
-  const data = {
-    name: name,
-    link: link,
-    score: 1
+export function generateBody () {
+  return {
+    name: 'Falamansa - Xote dos Milagres',
+    genresIds: [1, 2],
+    link: 'https://www.youtube.com/watch?v=chwyjJbcs1Y'
   };
-
-  const song = await connection.query(
-    `INSERT INTO songs (name,link,score) VALUES ($1, $2, $3) RETURNING *`,
-    [data.name, data.link, data.score]
-  );
-
-  return song;
 }
