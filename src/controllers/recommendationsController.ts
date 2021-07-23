@@ -57,9 +57,9 @@ export async function load(_: Request, res: Response) {
 export async function loadTop(req: Request, res: Response) {
     try {
         const amount = Number(req.params.amount);
-        const songs = await recommendationsService.loadTop(amount);
-        if(!songs) res.sendStatus(404);
-        res.send(songs);
+        const topSongs = await recommendationsService.loadTop(amount);
+        if(!topSongs) res.sendStatus(404);
+        res.send(topSongs);
     } catch(e) {
         console.log(e);
         res.sendStatus(500);

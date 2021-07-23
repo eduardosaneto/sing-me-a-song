@@ -58,7 +58,7 @@ export async function checkSongs() {
 }
 
 export async function loadTop(amount: number) {
-  const getTopRecommendations = await connection.query(`
-  SELECT * FROM recommendations ORDER BY score DESC LIMIT $1`, [amount]);
-  return getTopRecommendations.rows;
+  const topSongs = await connection.query(`
+  SELECT * FROM songs ORDER BY score DESC LIMIT $1`, [amount]);
+  return topSongs.rows;
 }
