@@ -21,12 +21,22 @@ export async function insert(req: Request, res: Response) {
     }        
 }
 
-export async function upvote(req: Request, res: Response) {
+export async function upScore(req: Request, res: Response) {
     try {
         const id = Number(req.params.id);
-        const result = await recommendationsService.upvote(id);
-        res.send(result);      
+        await recommendationsService.upScore(id);
+        res.sendStatus(200);     
+    } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
 
+export async function downScore(req: Request, res: Response) {
+    try {
+        const id = Number(req.params.id);
+        await recommendationsService.downScore(id);
+        res.sendStatus(200);     
     } catch(e) {
         console.log(e);
         res.sendStatus(500);
