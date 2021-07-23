@@ -6,7 +6,6 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/recommendations", (req, res) => {
-  const { name, link } = req.body;
   res.send("OK!");
 });
 
