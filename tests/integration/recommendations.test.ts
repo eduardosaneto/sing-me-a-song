@@ -73,9 +73,12 @@ describe("get /recommendations/top/:amount", () => {
     await loadTop();
     const result = await supertest(app).get(`/recommendations/top/3`);
     expect(result.body).toEqual([
-      { id: 3, name: "Test Music", youtubeLink: "https://www.youtube.com/", score: 5 },
-      { id: 2, name: "Test Music", youtubeLink: "https://www.youtube.com/", score: 4 },
-      { id: 1, name: "Test Music", youtubeLink: "https://www.youtube.com/", score: 3 },
+      { 
+        id: 1, 
+        name: "Falamansa - Xote dos Milagres", 
+        youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y", 
+        score: 17 
+      },
     ]);
   });
 });
