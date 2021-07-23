@@ -25,7 +25,7 @@ export async function upScore(req: Request, res: Response) {
     try {
         const id = Number(req.params.id);
         await recommendationsService.upScore(id);
-        res.sendStatus(200);     
+        return res.sendStatus(200);     
     } catch(e) {
         console.log(e);
         res.sendStatus(500);
