@@ -7,17 +7,17 @@ export function generateBody () {
   };
 }
 
-async function generateSong() {
+async function generateSong(score: number) {
   const song = generateBody ();
   const insertedSong = await connection.query(`
   INSERT INTO songs (name, link, score) VALUES ($1, $2, $3) RETURNING *
-  `, [song.name, song.youtubeLink, 0]);
+  `, [song.name, song.youtubeLink, score]);
 
   return insertedSong.rows[0]
 }
 
 export async function upScore() {   
-  const insertedSong = await generateSong();
+  const insertedSong = await generateSong(0);
   const actualScore = insertedSong.score;    
   let newScore = actualScore + 1; 
 
@@ -27,7 +27,7 @@ export async function upScore() {
 }
 
 export async function downScore() {   
-  const insertedSong = await generateSong();
+  const insertedSong = await generateSong(0);
   const actualScore = insertedSong.score;    
   let newScore = actualScore + 1; 
 
@@ -42,4 +42,29 @@ async function updateScore(newScore: number, insertedSong: any) {
   `, [newScore, insertedSong.link]);
 
   return score;
+}
+
+export async function load() {
+
+  await generateSong(0);   
+
+  const songs = await connection.query(`SELECT * FROM songs ORDER BY RANDOM() LIMIT 1`);
+
+  return songs.rows[0];
+}
+
+export async function checkSongs() {
+  const response = await connection.query(`SELECT COUNT(*) AS RowCnt FROM songs`);
+  return response.rowCount;
+}
+
+export async function loadTop() {
+
+  await generateSong(17);
+
+  const getTop = await connection.query(`
+  SELECT * FROM recommendations
+  ORDER BY score DESC LIMIT $1`, [17]);
+
+  return getTop.rows;     
 }

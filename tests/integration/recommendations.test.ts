@@ -2,7 +2,7 @@ import "../../src/setup";
 import supertest from "supertest";
 import app from "../../src/app";
 
-import { generateBody, upScore, downScore } from "../factory/recommendationsFactory";
+import { generateBody, upScore, downScore, load, checkSongs, loadTop } from "../factory/recommendationsFactory";
 import { clearDatabase, closeConnection } from "../utils/database";
 
 beforeEach(async () => {
@@ -46,5 +46,36 @@ describe("post /recommendations/:id/downvote", () => {
     await downScore();
     const result = await supertest(app).post(`/recommendations/1/downvote`);
     expect(result.status).toEqual(200);
+  });
+});
+
+describe("post /recommendations/random", () => {
+  it("should answer with an object containing every recommendation randomically", async () => {
+    await load();
+    const response = await supertest(app).get(`/recommendations/random`);
+    expect(response.body).toEqual(expect.objectContaining({
+      id: expect.any(Number),
+      name: expect.any(String),
+      youtubeLink: expect.any(String),      
+      score: expect.any(Number)            
+    }));
+  });
+
+  it("should answer 404 if there is no song recommended", async () => {
+    await checkSongs();
+    const response = await supertest(app).get(`/recommendations/random`);
+    expect(response.status).toEqual(404);
+  })
+});
+
+describe("get /recommendations/top/:amount", () => {
+  it("should answer the list of recommendations", async () => {
+    await loadTop();
+    const result = await supertest(app).get(`/recommendations/top/3`);
+    expect(result.body).toEqual([
+      { id: 3, name: "Test Music", youtubeLink: "https://www.youtube.com/", score: 5 },
+      { id: 2, name: "Test Music", youtubeLink: "https://www.youtube.com/", score: 4 },
+      { id: 1, name: "Test Music", youtubeLink: "https://www.youtube.com/", score: 3 },
+    ]);
   });
 });
